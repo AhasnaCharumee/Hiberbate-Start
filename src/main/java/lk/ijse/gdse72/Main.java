@@ -5,6 +5,9 @@ import entity.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         Customer customer = new Customer(3,"Lithira","ll@gmail.com","0772696876");
@@ -13,7 +16,11 @@ public class Main {
         //Customer customerById = getCustomerById(3);
         //System.out.println(customerById);
 //        deleteCustomerById(1);
-        updateCustomer(3, new Customer(3,"Lithira","lithira@gmail.com","0772696876"));
+//        updateCustomer(3, new Customer(3,"Lithira","lithira@gmail.com","0772696876"));
+        List<Customer> allCustomers = new Main().getAllCustomers();
+        for (Customer allCustomer : allCustomers) {
+            System.out.println(allCustomer);
+        }
 
     }
        public static  boolean saveCustomer(Customer customer) {
@@ -78,5 +85,12 @@ public class Main {
            }finally {
                session.close();
            }
+       }
+//xml to property
+       public List<Customer> getAllCustomers(){
+           Session session = FactoryConfiguration.getInstance().getSession();
+           List<Customer> customers = (ArrayList<Customer>) session.createQuery("from entity.Customer").list();
+           session.close();
+           return customers;
        }
 }
