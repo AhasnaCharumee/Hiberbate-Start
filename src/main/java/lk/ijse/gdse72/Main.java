@@ -9,7 +9,12 @@ public class Main {
     public static void main(String[] args) {
         Customer customer = new Customer(3,"Lithira","ll@gmail.com","0772696876");
 
-        saveCustomer(customer);
+        //saveCustomer(customer);
+        //Customer customerById = getCustomerById(3);
+        //System.out.println(customerById);
+//        deleteCustomerById(1);
+        updateCustomer(3, new Customer(3,"Lithira","lithira@gmail.com","0772696876"));
+
     }
        public static  boolean saveCustomer(Customer customer) {
            Session session = FactoryConfiguration.getInstance().getSession();
@@ -29,5 +34,49 @@ public class Main {
            }
 
 
+       }
+
+       public static Customer getCustomerById(int id){
+           Session session = FactoryConfiguration.getInstance().getSession();
+           Customer customer = session.get(Customer.class, id);
+           session.close();
+              return customer;
+       }
+
+       public static boolean deleteCustomerById(int id){
+              Session session = FactoryConfiguration.getInstance().getSession();
+              try {
+                Transaction transaction = session.beginTransaction();
+                Customer customer = session.get(Customer.class, id);
+                session.delete(customer);
+                transaction.commit();
+                System.out.println("Customer Deleted");
+                return true;
+              } catch (Exception e) {
+                System.out.println("Customer Not Deleted");
+                e.printStackTrace();
+                return false;
+              }finally {
+                session.close();
+              }
+
+       }
+       public static boolean updateCustomer(int id, Customer newCustomer){
+           Session session = FactoryConfiguration.getInstance().getSession();
+           try {
+               Customer customer = session.get(Customer.class, id);
+               Transaction transaction = session.beginTransaction();
+               customer.setName(newCustomer.getName());
+                customer.setEmail(newCustomer.getEmail());
+                customer.setContact(newCustomer.getContact());
+                transaction.commit();
+               return true;
+           } catch (Exception e) {
+               System.out.println("Customer Not Updated");
+               e.printStackTrace();
+               return false;
+           }finally {
+               session.close();
+           }
        }
 }
