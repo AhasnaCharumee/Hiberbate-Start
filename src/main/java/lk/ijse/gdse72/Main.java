@@ -7,19 +7,27 @@ import org.hibernate.Transaction;
 
 public class Main {
     public static void main(String[] args) {
-        Customer customer = new Customer(
-                1,
-                "Saman",
-                "saman@gmail.com"
-        );
-        Session session = FactoryConfiguration.getInstance().getSession();
+        Customer customer = new Customer(3,"Lithira","ll@gmail.com","0772696876");
 
-        Transaction transaction = session.beginTransaction();
-
-        session.save(customer);
-
-        transaction.commit();
-        session.close();
-
+        saveCustomer(customer);
     }
+       public static  boolean saveCustomer(Customer customer) {
+           Session session = FactoryConfiguration.getInstance().getSession();
+           try {
+               Transaction transaction = session.beginTransaction();
+               session.save(customer);
+               transaction.commit();
+               System.out.println("Customer Saved");
+               return true;
+           } catch (Exception e) {
+               System.out.println("Customer Not Saved");
+               e.printStackTrace();
+                return false;
+
+           }finally {
+                session.close();
+           }
+
+
+       }
 }
